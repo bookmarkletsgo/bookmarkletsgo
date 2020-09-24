@@ -1,0 +1,14 @@
+{
+  "name": "bookmarkletsgo",
+  "title": "BookmarkletsGo",
+  "version": "0.0.1",
+  "description": "Easy find and install bookmarklets.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bookmarklet"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}

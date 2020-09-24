@@ -1,0 +1,14 @@
+{
+  "name": "hello-world",
+  "title": "Hello World",
+  "version": "1.0.0",
+  "description": "Hello World! Sample source code of bookmarklet.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hello-world"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "view-cookies",
+  "title": "View Cookies",
+  "version": "1.0.0",
+  "description": "Allows you to see cookies.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cookie"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}

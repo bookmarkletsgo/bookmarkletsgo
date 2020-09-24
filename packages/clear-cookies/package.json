@@ -1,0 +1,14 @@
+{
+  "name": "clear-cookies",
+  "title": "Clear Cookies",
+  "version": "1.0.0",
+  "description": "Clears the cookies of the current site.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cookie"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}

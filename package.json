@@ -1,0 +1,54 @@
+{
+  "name": "bookmarkletsgo",
+  "version": "0.0.1",
+  "description": "Easy find and install bookmarklets.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "prettier --write . && xo",
+    "lint:fix": "prettier --write . && xo --fix",
+    "start": "npm run build && npx http-server -p 8090",
+    "build": "node tools/build-all.js",
+    "build:prod": "NODE_ENV=production node tools/build-all.js",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "bookmarkleter": "github:bookmarkletsgo/bookmarkleter",
+    "fs-extra": "^9.0.1",
+    "prettier": "^2.1.2",
+    "xo": "^0.33.1"
+  },
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dailyrandomphoto/bookmarkletsgo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dailyrandomphoto/bookmarkletsgo/issues"
+  },
+  "homepage": "https://github.com/dailyrandomphoto/bookmarkletsgo#readme",
+  "xo": {
+    "space": 2,
+    "prettier": true,
+    "rules": {
+      "promise/prefer-await-to-then": 0,
+      "capitalized-comments": 0,
+      "unicorn/no-for-loop": 0,
+      "no-alert": 0
+    },
+    "envs": [
+      "browser",
+      "node"
+    ],
+    "overrides": [
+      {
+        "files": "test/*.js",
+        "envs": [
+          "node",
+          "mocha"
+        ]
+      }
+    ]
+  }
+}

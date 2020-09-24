@@ -1,0 +1,16 @@
+{
+  "name": "clear-local-storage",
+  "title": "Clear Local Storage",
+  "version": "1.0.0",
+  "description": "Clears local storage for the current domain.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "clipboard",
+    "title",
+    "url"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
