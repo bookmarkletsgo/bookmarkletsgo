@@ -1,7 +1,7 @@
 {
   "name": "bookmarkletsgo",
   "title": "BookmarkletsGo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Easy find and install bookmarklets.",
   "main": "index.js",
   "scripts": {

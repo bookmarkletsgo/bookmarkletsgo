@@ -1,8 +1,10 @@
-try{
+try {
   navigator.clipboard
     .writeText(`${window.document.title} ${window.location.href}`)
     .then(() => alert('done'))
-    .catch((error = 'Error: DOMException') => console.error(error) & alert(error));
-} catch (e) {
-  alert(e);
+    .catch(
+      (error = 'Error: DOMException') => console.error(error) & alert(error)
+    );
+} catch (error) {
+  alert(error);
 }

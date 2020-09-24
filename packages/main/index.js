@@ -1,9 +1,15 @@
 'use strict';
 
-function prepareFrame(window, document) {
+(function (window, document) {
+  const createElement = (tag) => document.createElement(tag);
+  const querySelector = (selector) =>
+    document.querySelector(selector) || createElement('a');
+  // always return false
+  // eslint-disable-next-line no-return-assign
+  const toggleView = (show) =>
+    !(querySelector('#bookmarkletsgo').style.display = show ? 'block' : 'none');
   if (window.__BOOKMARKLETSGO_INITED) {
-    document.querySelector('#bookmarklet_store').style.display = 'block';
-    return;
+    return toggleView(true);
   }
 
   const iframeOrigin =
@@ -12,39 +18,38 @@ function prepareFrame(window, document) {
       : 'http://localhost:8090';
   const iframeUrl = iframeOrigin + '/bookmarklets.html';
 
-  window.__BOOKMARKLETSGO_INITED = true;
   window.addEventListener(
     'message',
     (event) => {
       if (event.origin !== iframeOrigin) return;
-
-      const script = document.createElement('script');
-      script.text = event.data;
-      document.body.append(script);
-      script.remove();
+      const bookmarklet = event.data;
+      setTimeout(() => {
+        const script = createElement('script');
+        script.text = bookmarklet;
+        document.body.append(script);
+        script.remove();
+      }, 10);
     },
     false
   );
 
-  const ifrm = document.createElement('iframe');
+  const ifrm = createElement('iframe');
   ifrm.setAttribute('src', iframeUrl);
   ifrm.style = 'width:100%;height:100%;border:0;margin:0;padding:0';
-  const div = document.createElement('div');
-  div.id = 'bookmarklet_store';
+  const div = createElement('div');
+  div.id = 'bookmarkletsgo';
   div.style =
-    'width:300px;height:300px;position:fixed;top:10px;right:10px;z-index:10000;background-color:#f2f2f2;opacity:85%;display:block';
-  const closeBtn = document.createElement('div');
+    'width:300px;height:300px;position:fixed;top:10px;right:10px;z-index:2147483656;background-color:#f2f2f2;opacity:85%;display:block';
+  const closeBtn = createElement('div');
   closeBtn.style = 'width:20px;height:20px;position:fixed;top:20px;right:10px;';
   closeBtn.innerHTML = '<a href="#" style="text-decoration:none">x</a>';
   div.append(ifrm);
   div.append(closeBtn);
   closeBtn.firstChild.addEventListener('click', function (event) {
-    document.querySelector('#bookmarklet_store').style.display = 'none';
     event.preventDefault();
-    return false;
+    return toggleView(false);
   });
 
   document.body.append(div);
-}
-
-prepareFrame(window, document);
+  window.__BOOKMARKLETSGO_INITED = true;
+})(window, document);

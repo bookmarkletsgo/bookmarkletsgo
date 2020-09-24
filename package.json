@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "devDependencies": {
-    "bookmarkleter": "github:bookmarkletsgo/bookmarkleter",
+    "bookmarkleter": "github:bookmarkletsgo/bookmarkleter#add-special-characters",
     "fs-extra": "^9.0.1",
     "prettier": "^2.1.2",
     "xo": "^0.33.1"
