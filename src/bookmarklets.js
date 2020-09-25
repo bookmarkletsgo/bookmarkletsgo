@@ -15,7 +15,8 @@
     item.addEventListener(
       'click',
       (event) => {
-        setTitleAndUrl(event.target);
+        // setting title and url after copy-title-url bookmarklets have executed
+        setTimeout(() => setTitleAndUrl(event.target), 100);
 
         const script = decodeURIComponent(event.target.href.slice(11));
         // console.log(script);

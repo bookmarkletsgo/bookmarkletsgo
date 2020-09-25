@@ -1,8 +1,8 @@
 {
-  "name": "copy-title-url",
-  "title": "Copy Title & URL",
+  "name": "copy-title",
+  "title": "Copy Title",
   "version": "1.0.0",
-  "description": "Copy title & URL of current page to the clipboard.",
+  "description": "Copy title of current page to the clipboard.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,6 @@
   "keywords": [
     "clipboard",
     "title",
-    "url",
     "copy"
   ],
   "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
