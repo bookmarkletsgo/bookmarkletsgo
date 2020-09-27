@@ -49,6 +49,8 @@ npm run build:prod
   - category, tags
   - browser compatibility
 - i18n
+- Support settings for individual packages
+  - e.g. save selected search engine
 
 ## License
 

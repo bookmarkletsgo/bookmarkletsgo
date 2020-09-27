@@ -1,0 +1,16 @@
+{
+  "name": "search-on-this-site",
+  "title": "Search On This Site",
+  "version": "1.0.0",
+  "description": "Search something through run a site search on Google.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "search",
+    "site-search",
+    "google"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
