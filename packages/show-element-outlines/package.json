@@ -1,0 +1,16 @@
+{
+  "name": "show-element-outlines",
+  "title": "Show Element Outlines",
+  "version": "1.0.0",
+  "description": "Toggles the visibility of a red outline around all elements to help visualize layout.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "element",
+    "outline",
+    "css-trick"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
