@@ -1,0 +1,16 @@
+{
+  "name": "show-font-name",
+  "title": "Show Font Name",
+  "version": "1.0.0",
+  "description": "Displays the font used by the selected text.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "text",
+    "font",
+    "css-trick"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
