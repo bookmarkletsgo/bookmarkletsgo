@@ -23,12 +23,13 @@
     (event) => {
       if (event.origin !== iframeOrigin) return;
       const bookmarklet = event.data;
+      // To use alert and prompt function on Chrome, it should add some delay when execute the script.
       setTimeout(() => {
         const script = createElement('script');
         script.text = bookmarklet;
         document.body.append(script);
         script.remove();
-      }, 10);
+      }, 200);
     },
     false
   );
