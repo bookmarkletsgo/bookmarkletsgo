@@ -1,0 +1,17 @@
+{
+  "name": "show-element-size",
+  "title": "Show Element Size",
+  "version": "1.0.0",
+  "description": "Toggles the display of the size of the element that is moused over.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "element",
+    "outline",
+    "size",
+    "css-trick"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
