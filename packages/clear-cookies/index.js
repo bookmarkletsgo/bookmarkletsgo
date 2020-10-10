@@ -1,10 +1,13 @@
-(function (document, location) {
-  if (!document.cookie) return;
-  function setCookie(v) {
-    // console.log(v);
-    document.cookie = v;
-  }
+import * as document from 'document';
+import * as location from 'location';
 
+function setCookie(v) {
+  // console.log(v);
+  // eslint-disable-next-line no-import-assign
+  document.cookie = v;
+}
+
+if (document.cookie) {
   const cookies = document.cookie.split('; ');
   for (let c = 0; c < cookies.length; c++) {
     const cookieBase =
@@ -24,7 +27,6 @@
       d.shift();
     }
   }
-})(document, window.location);
+}
 
-// console.log('current cookie: ' + document.cookie);
 alert('done');

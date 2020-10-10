@@ -1,12 +1,16 @@
-(function(window, document) {
-  const createElement = (tag) => document.createElement(tag);
-	window.showElementSize = window.showElementSize || {};
+import * as window from 'window';
+import * as document from 'document';
 
-	if (typeof showElementSize.isActive === 'undefined') {
-		showElementSize.isActive = false;
+const createElement = (tag) => document.createElement(tag);
+const showElementSize = window.showElementSize || {};
+// eslint-disable-next-line no-import-assign
+window.showElementSize = showElementSize;
 
-		showElementSize.style = createElement('style');
-		showElementSize.style.innerHTML = `
+if (typeof showElementSize.isActive === 'undefined') {
+  showElementSize.isActive = false;
+
+  showElementSize.style = createElement('style');
+  showElementSize.style.innerHTML = `
 			.bookmarkletsgo_show-element-size {
 				z-index: 1000000000;
 				position: absolute;
@@ -37,51 +41,53 @@
 				outline: 0 !important;
 			}
 		`;
-		document.head.append(showElementSize.style);
+  document.head.append(showElementSize.style);
 
-		showElementSize.container = createElement('div');
-		showElementSize.container.classList.add('bookmarkletsgo_show-element-size');
-		document.body.append(showElementSize.container);
+  showElementSize.container = createElement('div');
+  showElementSize.container.classList.add('bookmarkletsgo_show-element-size');
+  document.body.append(showElementSize.container);
 
-		showElementSize.overlay = createElement('div');
-		showElementSize.overlay.classList.add('bookmarkletsgo_show-element-size__overlay');
-		showElementSize.container.append(showElementSize.overlay);
+  showElementSize.overlay = createElement('div');
+  showElementSize.overlay.classList.add(
+    'bookmarkletsgo_show-element-size__overlay'
+  );
+  showElementSize.container.append(showElementSize.overlay);
 
-		showElementSize.label = createElement('div');
-		showElementSize.label.classList.add('bookmarkletsgo_show-element-size__label');
-		showElementSize.container.append(showElementSize.label);
+  showElementSize.label = createElement('div');
+  showElementSize.label.classList.add(
+    'bookmarkletsgo_show-element-size__label'
+  );
+  showElementSize.container.append(showElementSize.label);
 
-		showElementSize.update = (event) => {
-			let rect = event.target.getBoundingClientRect();
+  showElementSize.update = (event) => {
+    const rect = event.target.getBoundingClientRect();
 
-			let overlayX = window.pageXOffset + rect.left;
-			let overlayY = window.pageYOffset + rect.top;
-			let overlayWidth = rect.width;
-			let overlayHeight = rect.height;
-			showElementSize.overlay.style.transform = `
+    const overlayX = window.pageXOffset + rect.left;
+    const overlayY = window.pageYOffset + rect.top;
+    const overlayWidth = rect.width;
+    const overlayHeight = rect.height;
+    showElementSize.overlay.style.transform = `
 				translate(${overlayX}px, ${overlayY}px)
 				scale(${overlayWidth}, ${overlayHeight})
 			`;
 
-			let labelX = window.pageXOffset + event.clientX + 8;
-			let labelY = window.pageYOffset + event.clientY + 16;
-			showElementSize.label.style.transform = `translate(${labelX}px, ${labelY}px)`;
+    const labelX = window.pageXOffset + event.clientX + 8;
+    const labelY = window.pageYOffset + event.clientY + 16;
+    showElementSize.label.style.transform = `translate(${labelX}px, ${labelY}px)`;
 
-			let elementWidth = Math.round(rect.width);
-			let elementHeight = Math.round(rect.height);
-			showElementSize.label.innerText = `${elementWidth} × ${elementHeight}`;
+    const elementWidth = Math.round(rect.width);
+    const elementHeight = Math.round(rect.height);
+    showElementSize.label.textContent = `${elementWidth} × ${elementHeight}`;
 
-			showElementSize.container.style.opacity = '1';
-		};
-	}
+    showElementSize.container.style.opacity = '1';
+  };
+}
 
-	if (showElementSize.isActive) {
-		showElementSize.isActive = false;
-		document.removeEventListener('mousemove', showElementSize.update);
-		showElementSize.container.style.opacity = '0';
-		return;
-	}
-
-	showElementSize.isActive = true;
-	document.addEventListener('mousemove', showElementSize.update, false);
-})(window, document);
+if (showElementSize.isActive) {
+  showElementSize.isActive = false;
+  document.removeEventListener('mousemove', showElementSize.update);
+  showElementSize.container.style.opacity = '0';
+} else {
+  showElementSize.isActive = true;
+  document.addEventListener('mousemove', showElementSize.update, false);
+}

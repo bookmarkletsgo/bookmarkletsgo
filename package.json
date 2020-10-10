@@ -6,16 +6,22 @@
   "scripts": {
     "lint": "prettier --write . && xo",
     "lint:fix": "prettier --write . && xo --fix",
-    "start": "npm run build && npx http-server -p 8090",
-    "build": "node tools/build-all.js",
+    "start": "npm-run-all -p build dev-server",
+    "build": "npx nodemon -L tools/build-all.js",
     "build:prod": "NODE_ENV=production node tools/build-all.js",
+    "dev-server": "mkdir -p public && npx http-server -p 8090",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [],
   "devDependencies": {
+    "@rollup/plugin-replace": "^2.3.3",
     "bookmarkleter": "github:bookmarkletsgo/bookmarkleter#add-special-characters",
+    "dotenv": "^8.2.0",
     "fs-extra": "^9.0.1",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.1.2",
+    "rollup": "^2.28.2",
     "xo": "^0.33.1"
   },
   "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)",
@@ -50,5 +56,12 @@
         ]
       }
     ]
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "public/*",
+      "test/*"
+    ],
+    "delay": "3000"
   }
 }

@@ -1,9 +1,6 @@
-const open = (url) => {
-  // location.href = url;
-  window.open(url, '_blank');
-};
+import openNewWindow from '../../lib/open-new-window';
 
 const q = prompt('What are you looking for?', '');
 if (q) {
-  open('https://www.google.com/search?q=' + encodeURIComponent(q));
+  openNewWindow('https://www.google.com/search?q=' + encodeURIComponent(q));
 }

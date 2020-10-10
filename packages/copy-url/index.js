@@ -1,10 +1,4 @@
-try {
-  navigator.clipboard
-    .writeText(window.location.href)
-    .then(() => alert('done'))
-    .catch(
-      (error = 'Error: DOMException') => console.error(error) & alert(error)
-    );
-} catch (error) {
-  alert(error);
-}
+import * as location from 'location';
+import copy from '../../lib/copy-common';
+
+copy(location.href);

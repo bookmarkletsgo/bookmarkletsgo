@@ -63,7 +63,13 @@ function buildHtml(bookmarklets) {
 
   return Promise.all([
     readFile(htmlTemplteFilepath, 'utf-8'),
-    readFile(jsFilepath, 'utf-8')
+    // readFile(jsFilepath, 'utf-8')
+    buildBookmarklet(jsFilepath, {
+      urlencode: false,
+      minify: true
+    }).then((bookmarklet) =>
+      bookmarklet.bookmarkletSrc.replace(/^javascript:/, '')
+    )
   ])
     .then(([htmlTemplate, script]) =>
       htmlTemplate
@@ -110,9 +116,14 @@ try {
       resolve(WORKING_DIR, 'public/test.html')
     );
 
-    copyFileSync(
-      resolve(WORKING_DIR, 'packages/main/index.js'),
-      resolve(WORKING_DIR, 'public/packages/main/index.js')
+    buildBookmarklet(resolve(WORKING_DIR, 'packages/main/index.js'), {
+      urlencode: false,
+      minify: false
+    }).then((bookmarklet) =>
+      writeFile(
+        resolve(WORKING_DIR, 'public/packages/main/index.js'),
+        bookmarklet.bookmarkletSrc.replace(/^javascript:/, '')
+      )
     );
   }
 
