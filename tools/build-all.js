@@ -58,7 +58,9 @@ function buildHtml(bookmarklets) {
       (bookmarklet) =>
         `<li><a id="bookmarkletsgo_${bookmarklet._id}" href="${
           bookmarklet.bookmarkletSrc
-        }">${bookmarklet.title || bookmarklet.name}</a></li>`
+        }">${
+          bookmarklet.title || bookmarklet.name
+        }</a> (<a class="btn_copy" href="#">Copy</a>)</li>`
     );
 
   return Promise.all([

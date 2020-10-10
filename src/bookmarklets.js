@@ -1,5 +1,7 @@
 import * as window from 'window';
 import * as document from 'document';
+import { addEventListener } from '../lib/common';
+import copy from '../lib/copy-common';
 
 // const specialCharactersPattern = new RegExp(
 //   ["'", '"', '<', '>', '#', '@', ' ', '\\&', '\\?'].join('|'),
@@ -10,13 +12,21 @@ import * as document from 'document';
 const setTitleAndUrl = (item) => {
   history.pushState(null, '', '#' + item.href);
   // history.pushState(null, '', '#' + urlencode(item.href));
+  // eslint-disable-next-line no-import-assign
   document.title = item.text || 'BookmarkletsGo';
 };
 
 document.querySelectorAll('a').forEach((item) => {
-  item.addEventListener(
-    'click',
-    (event) => {
+  if (item.classList.contains('btn_copy')) {
+    addEventListener(item, 'click', (event) => {
+      const bookmarklet = event.target.parentNode.firstChild;
+      copy(bookmarklet.href);
+
+      event.preventDefault();
+      return false;
+    });
+  } else {
+    addEventListener(item, 'click', (event) => {
       // setting title and url after copy-title-url bookmarklets have executed
       setTimeout(() => setTitleAndUrl(event.target), 100);
 
@@ -35,12 +45,11 @@ document.querySelectorAll('a').forEach((item) => {
       }
 
       return false;
-    },
-    false
-  );
+    });
 
-  // initialize title and URL
-  if (item.id === 'bookmarkletsgo_main') {
-    setTitleAndUrl(item);
+    // initialize title and URL
+    if (item.id === 'bookmarkletsgo_main') {
+      setTitleAndUrl(item);
+    }
   }
 });
