@@ -41,7 +41,9 @@
       "promise/prefer-await-to-then": 0,
       "capitalized-comments": 0,
       "unicorn/no-for-loop": 0,
-      "no-alert": 0
+      "no-alert": 0,
+      "eslint-comments/no-unused-disable": 0,
+      "no-import-assign": 1
     },
     "envs": [
       "browser",

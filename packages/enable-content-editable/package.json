@@ -1,0 +1,15 @@
+{
+  "name": "enable-content-editable",
+  "title": "Enable Content Editable",
+  "version": "1.0.0",
+  "description": "Enable content of current page editable.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "content",
+    "editable"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
