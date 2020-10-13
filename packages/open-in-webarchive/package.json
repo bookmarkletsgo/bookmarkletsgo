@@ -1,0 +1,14 @@
+{
+  "name": "open-in-webarchive",
+  "title": "Open in WebArchive",
+  "version": "1.0.0",
+  "description": "Open page that doesn't exist anymore in Web Archive.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "WebArchive"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
