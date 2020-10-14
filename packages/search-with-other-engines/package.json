@@ -1,0 +1,17 @@
+{
+  "name": "search-with-other-engines",
+  "title": "Search With Other Engines",
+  "version": "1.0.0",
+  "description": "Search the same query on other engines.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "search",
+    "google",
+    "bing",
+    "duckduckgo"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}

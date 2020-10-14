@@ -1,0 +1,14 @@
+{
+  "name": "alexa-rank",
+  "title": "Alexa Rank",
+  "version": "1.0.0",
+  "description": "Alexa rank of a website.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Alexa"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
