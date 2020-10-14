@@ -1,0 +1,17 @@
+{
+  "name": "show-link-types",
+  "title": "Show Link Types",
+  "version": "1.0.0",
+  "description": "Show how many links pointing to external website and which one are internal.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "element",
+    "outline",
+    "link",
+    "css-trick"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
