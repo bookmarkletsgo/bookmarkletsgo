@@ -1,0 +1,16 @@
+{
+  "name": "enable-right-click",
+  "title": "Enable Right-Click",
+  "version": "1.0.0",
+  "description": "Enable right-clicking.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "context-menu",
+    "right-click",
+    "restriction"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}

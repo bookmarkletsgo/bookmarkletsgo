@@ -1,0 +1,15 @@
+{
+  "name": "enable-text-selection",
+  "title": "Enable Text Selection",
+  "version": "1.0.0",
+  "description": "It lets you select text on sites that don’t let you.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "select",
+    "restriction"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
