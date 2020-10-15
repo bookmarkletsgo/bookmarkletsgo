@@ -1,0 +1,15 @@
+{
+  "name": "dragon",
+  "title": "Dragon",
+  "version": "1.0.0",
+  "description": "This bookmarklet lets you drag any element on a website using a mouse or touchscreen.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "drag",
+    "css-trick"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
