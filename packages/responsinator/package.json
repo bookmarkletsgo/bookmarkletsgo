@@ -1,0 +1,15 @@
+{
+  "name": "responsinator",
+  "title": "Responsinator",
+  "version": "1.0.0",
+  "description": "Responsinator helps website makers quickly get an indication of how their responsive site will look on the most popular devices.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "responsive",
+    "design"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}

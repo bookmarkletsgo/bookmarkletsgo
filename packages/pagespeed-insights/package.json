@@ -1,0 +1,15 @@
+{
+  "name": "pagespeed-insights",
+  "title": "PageSpeed Insights",
+  "version": "1.0.0",
+  "description": "PageSpeed Insights analyzes the content of a web page, then generates suggestions to make that page faster.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "PageSpeed",
+    "performance"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}
