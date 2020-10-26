@@ -4,13 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>BookmarkletsGo</title>
+    <style>.csp_on {display: none}</style>
   </head>
   <body>
     <ul>{bookmarklets}</ul>
-    <p>Tip: how to use bookmarklets</p>
+    <h2>Tip: how to use bookmarklets</h2>
+    <p class="csp_on">Info: this site does not support bookmarkletsgo due to Content Security Policy. </p>
     <ul>
-      <li>Drag and drop bookmarklets above to the 'Bookmarks Bar' of your browser.</li>
-      <li>Just bookmark current URL, then edit bookmark, delete from 'http' to '#'.</li>
+      <li>Just click title of bookmarklets.</li>
+      <li>Drag and drop bookmarklets above to the 'Bookmarks Bar' of your browser then click from the 'Bookmarks Bar'.</li>
+      <li id="tip_bookmark" style="display:none">Just bookmark current URL, then edit bookmark, delete from 'http' to '#'.</li>
       <li>Click 'Copy' button, then add a new bookmark with copied URL.</li>
     </ul>
     <script type="text/javascript">{bookmarkletsScript}</script>

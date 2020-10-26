@@ -13,6 +13,7 @@ Easy find and install bookmarklets.
 ## Related
 
 - [Bookmarkleter](https://github.com/chriszarate/bookmarkleter) - You have JavaScript. You need a [bookmarklet][bookmarklet]. This does that.
+- [RadLikeWhoa/bookmarklets](https://github.com/RadLikeWhoa/bookmarklets) - bookmarklets is a curated list of, you guessed it, bookmarklets that are useful on the web.
 
 ## Related Add ons
 
@@ -42,7 +43,7 @@ npm run build:prod
 - Update version of main bookmarklet
 - Update version of saved bookmarklets
 - Contribution guideline
-- Build bookmarklet tool
+- [x] Build bookmarklet tool
 - Github action for build bookmarklet
 - Bookmarklet information
   - title, description, version
@@ -51,6 +52,7 @@ npm run build:prod
 - i18n
 - Support settings for individual packages
   - e.g. save selected search engine
+- Add custom bookmarklets source. e.g. add my bookmarklets to bookmarkletsgo, and only I can see them.
 
 ## License
 

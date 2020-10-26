@@ -43,6 +43,8 @@
       "unicorn/no-for-loop": 0,
       "no-alert": 0,
       "eslint-comments/no-unused-disable": 0,
+      "unicorn/prevent-abbreviations": 0,
+      "unicorn/prefer-optional-catch-binding": 0,
       "no-import-assign": 1
     },
     "envs": [
@@ -64,6 +66,6 @@
       "public/*",
       "test/*"
     ],
-    "delay": "3000"
+    "delay": "1500"
   }
 }

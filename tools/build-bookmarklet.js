@@ -127,7 +127,11 @@ if (require.main === module) {
 
   try {
     main(filepath, options)
-      .then((result) => console.log(result.bookmarkletSrc))
+      .then((result) =>
+        console.log(
+          result.bookmarkletSrc + '\nlength: ' + result.bookmarkletSrc.length
+        )
+      )
       .catch(exit);
   } catch (error) {
     exit(error);
