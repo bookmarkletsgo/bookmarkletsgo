@@ -1,0 +1,15 @@
+{
+  "name": "clone-page",
+  "title": "Clone Page",
+  "version": "1.0.0",
+  "description": "Clone current page to a new tab.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "clone",
+    "copy"
+  ],
+  "author": "dailyrandomphoto <dailyrandomphoto@gmail.com> (https://www.dailyrandomphoto.com/)"
+}

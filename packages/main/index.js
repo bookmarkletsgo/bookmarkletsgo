@@ -56,8 +56,12 @@ if (globalVal[initialized]) {
       origin: event.origin
     });
     const message = event.data;
+    const messageOrigin = event[origin];
+    // compare with window.origin for cloned page(about:blank).
     if (
-      (event[origin] === iframeOrigin || event[origin] === location[origin]) &&
+      (messageOrigin === iframeOrigin ||
+        messageOrigin === location[origin] ||
+        messageOrigin === window[origin]) &&
       typeof message === 'object' &&
       message.from === APP_NAME
     ) {

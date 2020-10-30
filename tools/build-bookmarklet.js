@@ -26,7 +26,14 @@ function exit(err) {
 async function bundle(filepath) {
   const inputOptions = {
     input: filepath,
-    external: ['window', 'document', 'location', 'alert', 'console-error'],
+    external: [
+      'window',
+      'document',
+      'location',
+      'alert',
+      'setTimeout',
+      'console-error'
+    ],
     plugins: [
       replace({
         'process.env.NODE_ENV': JSON.stringify(
@@ -46,6 +53,7 @@ async function bundle(filepath) {
       document: 'document',
       location: 'location',
       alert: 'alert',
+      setTimeout: 'setTimeout',
       'console-error': 'console.error'
     }
   };
