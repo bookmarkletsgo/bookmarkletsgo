@@ -110,12 +110,12 @@ function main(filepath, options) {
     ...options
   };
 
-  // return readFile(filepath, 'utf-8').then((originSrc) => {
-  return bundle(filepath).then((originSrc) => {
+  // return readFile(filepath, 'utf-8').then((originalSrc) => {
+  return bundle(filepath).then((originalSrc) => {
     const bookmarkletSrc = postProcess(
-      bookmarkleter(preProcess(originSrc), options)
+      bookmarkleter(preProcess(originalSrc), options)
     );
-    return { originSrc, bookmarkletSrc };
+    return { originalSrc, bookmarkletSrc };
   });
 }
 
@@ -130,7 +130,7 @@ if (require.main === module) {
     urlencode: false,
     iife: false,
     transpile: true,
-    minify: false
+    minify: true
   };
 
   try {

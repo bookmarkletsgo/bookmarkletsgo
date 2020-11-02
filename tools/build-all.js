@@ -41,6 +41,16 @@ function readPackageInformation(filepath) {
     });
 }
 
+function saveGeneratedPackages(bookmarklets, destPath) {
+  bookmarklets.forEach((bookmarklet) => {
+    ensureDirSync(resolve(destPath, bookmarklet._id));
+    writeFile(
+      resolve(destPath, bookmarklet._id + '/index.js'),
+      bookmarklet.generatedSrc
+    );
+  });
+}
+
 function buildHtml(bookmarklets) {
   const list = bookmarklets
     .sort((a, b) => {
@@ -92,10 +102,20 @@ function loadPackages(dirname) {
 
             return Promise.all([
               readPackageInformation(resolve(subDirpath, 'package.json')),
-              buildBookmarklet(resolve(subDirpath, 'index.js'))
-            ]).then(([content, bookmarklet]) => ({
+              buildBookmarklet(resolve(subDirpath, 'index.js')),
+              buildBookmarklet(resolve(subDirpath, 'index.js'), {
+                urlencode: false,
+                minify: true
+              })
+            ]).then(([content, bookmarklet, bookmarklet2]) => ({
               ...content,
               ...bookmarklet,
+              ...{
+                generatedSrc: bookmarklet2.bookmarkletSrc.replace(
+                  /^javascript:/,
+                  ''
+                )
+              },
               ...{ _id: file }
             }));
           }
@@ -111,26 +131,20 @@ try {
     removeSync(resolve(WORKING_DIR, 'public'));
     ensureDirSync(resolve(WORKING_DIR, 'public'));
   } else {
-    ensureDirSync(resolve(WORKING_DIR, 'public/packages/main'));
-
     copyFileSync(
       resolve(WORKING_DIR, 'src/test.html'),
       resolve(WORKING_DIR, 'public/test.html')
     );
-
-    buildBookmarklet(resolve(WORKING_DIR, 'packages/main/index.js'), {
-      urlencode: false,
-      minify: false
-    }).then((bookmarklet) =>
-      writeFile(
-        resolve(WORKING_DIR, 'public/packages/main/index.js'),
-        bookmarklet.bookmarkletSrc.replace(/^javascript:/, '')
-      )
-    );
   }
 
   loadPackages(resolve(WORKING_DIR, 'packages'))
-    .then((bookmarklets) => buildHtml(bookmarklets))
+    .then((bookmarklets) => {
+      saveGeneratedPackages(
+        bookmarklets,
+        resolve(WORKING_DIR, 'public/packages/')
+      );
+      buildHtml(bookmarklets);
+    })
     .then(() => console.log('Done!'))
     .catch(exit);
 } catch (error) {
