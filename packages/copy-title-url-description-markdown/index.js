@@ -1,6 +1,6 @@
 import * as document from 'document';
 import * as location from 'location';
-import { querySelector } from '../../lib/common';
+import { querySelector } from '../../lib/query-selector';
 import copy from '../../lib/copy-common';
 
 const url = (querySelector('link[rel="canonical"]') || location).href;

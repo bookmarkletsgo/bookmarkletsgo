@@ -11,6 +11,13 @@
       this is a long div.
     </div>
     FOOTER
-    <script src="packages/main/index.js" charset="utf-8"></script>
+    <script type="text/javascript">console.log(1)</script>
+    <script id="test_script" src="packages/main/index.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      var a = document.querySelector('#test_script');
+      if (a) {
+        a.parentNode.removeChild(a);
+      }
+    </script>
   </body>
 </html>

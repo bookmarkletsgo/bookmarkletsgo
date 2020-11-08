@@ -1,12 +1,17 @@
 import * as document from 'document';
+import { isIE } from '../../lib/common';
 
 const body = document.body;
 const contentEditable = 'contentEditable';
 const designMode = 'designMode';
-if (body[contentEditable] === 'true') {
-  body[contentEditable] = 'false';
-  document[designMode] = 'off';
+if (body.getAttribute(contentEditable) === 'true') {
+  body.removeAttribute(contentEditable);
+  if (!isIE()) {
+    document[designMode] = 'off';
+  }
 } else {
-  body[contentEditable] = 'true';
-  document[designMode] = 'on';
+  body.setAttribute(contentEditable, 'true');
+  if (!isIE()) {
+    document[designMode] = 'on';
+  }
 }

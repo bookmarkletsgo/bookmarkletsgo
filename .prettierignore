@@ -2,3 +2,5 @@ node_modules/**
 public/**
 LICENSE
 bookmarklets.html
+test.html
+*.min.js

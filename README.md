@@ -53,6 +53,7 @@ npm run build:prod
 - Support settings for individual packages
   - e.g. save selected search engine
 - Add custom bookmarklets source. e.g. add my bookmarklets to bookmarkletsgo, and only I can see them.
+- Keyboard shortcuts. Press 1-9 to select and execute a bookmarklet.
 
 ## License
 

@@ -10,6 +10,7 @@ const {
   writeFile,
   ensureDirSync,
   copyFileSync,
+  copySync,
   removeSync
 } = require('fs-extra');
 const buildBookmarklet = require('./build-bookmarklet.js');
@@ -41,6 +42,21 @@ function readPackageInformation(filepath) {
     });
 }
 
+function printInfo(bookmarklets) {
+  console.log(''.padEnd(50, '='));
+  let total = 0;
+  bookmarklets.forEach((bookmarklet) => {
+    console.log(
+      `${bookmarklet._id.padEnd(40, ' ')} | ${
+        bookmarklet.bookmarkletSrc.length
+      }`
+    );
+    total += bookmarklet.bookmarkletSrc.length;
+  });
+  console.log(`${'Total'.padEnd(40, ' ')} | ${total}`);
+  console.log(''.padEnd(50, '='));
+}
+
 function saveGeneratedPackages(bookmarklets, destPath) {
   bookmarklets.forEach((bookmarklet) => {
     ensureDirSync(resolve(destPath, bookmarklet._id));
@@ -54,11 +70,26 @@ function saveGeneratedPackages(bookmarklets, destPath) {
 function buildHtml(bookmarklets) {
   const list = bookmarklets
     .sort((a, b) => {
-      if (a._id === 'main') {
+      // if (a._id === 'main') {
+      //   return -1;
+      // }
+      //
+      // if (b._id === 'main') {
+      //   return 1;
+      // }
+      //
+      // if (a._id === 'main-live') {
+      //   return -1;
+      // }
+      //
+      // if (b._id === 'main-live') {
+      //   return 1;
+      // }
+
+      if (a._id.startsWith('main') && !b._id.startsWith('main')) {
         return -1;
       }
-
-      if (b._id === 'main') {
+      if (b._id.startsWith('main') && !a._id.startsWith('main')) {
         return 1;
       }
 
@@ -68,7 +99,7 @@ function buildHtml(bookmarklets) {
       (bookmarklet) =>
         `<li><a id="bookmarkletsgo_${bookmarklet._id}" href="${
           bookmarklet.bookmarkletSrc
-        }">${
+        }" data-href="${bookmarklet.bookmarkletSrc}">${
           bookmarklet.title || bookmarklet.name
         }</a> (<a class="btn_copy" href="#">Copy</a>)</li>`
     );
@@ -137,8 +168,14 @@ try {
     );
   }
 
+  copySync(
+    resolve(WORKING_DIR, 'lib/polyfill'),
+    resolve(WORKING_DIR, 'public/lib/polyfill')
+  );
+
   loadPackages(resolve(WORKING_DIR, 'packages'))
     .then((bookmarklets) => {
+      printInfo(bookmarklets);
       saveGeneratedPackages(
         bookmarklets,
         resolve(WORKING_DIR, 'public/packages/')

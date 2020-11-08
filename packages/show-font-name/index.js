@@ -10,7 +10,8 @@ function getNodeFontStack(node) {
 }
 
 function getFirstAvailableFont(fonts) {
-  for (const font of fonts) {
+  for (let i = 0, len = fonts.length; i < len; i++) {
+    const font = fonts[i];
     const fontName = font.trim().replace(/"/g, '');
     const isAvailable = document.fonts.check(`16px ${fontName}`);
 
@@ -20,13 +21,17 @@ function getFirstAvailableFont(fonts) {
   }
 }
 
-const node = getSelectedNode();
+if (document.fonts) {
+  const node = getSelectedNode();
 
-if (node) {
-  const fonts = getNodeFontStack(node).split(',');
-  const firstAvailableFont = getFirstAvailableFont(fonts);
+  if (node) {
+    const fonts = getNodeFontStack(node).split(',');
+    const firstAvailableFont = getFirstAvailableFont(fonts);
 
-  alert(`Font: ${firstAvailableFont}`);
+    alert(`Font: ${firstAvailableFont}`);
+  } else {
+    alert('Please select a string of text and try again.');
+  }
 } else {
-  alert('Please select a string of text and try again.');
+  alert('Do not support this browser.');
 }

@@ -1,3 +1,6 @@
+import * as window from 'window';
+import * as p from '../../lib/polyfill/exports';
+p.apply(window, [p.Element.append, p.Element.remove]);
 import * as document from 'document';
 
 const id = 'bookmarkletsgo_show-element-outlines_style';

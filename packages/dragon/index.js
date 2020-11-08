@@ -3,7 +3,7 @@
 
 import * as document from 'document';
 import { addEventListener } from '../../lib/common';
-const parseInt = (x) => Number.parseInt(x, 10);
+const parseInt = (x) => window.parseInt(x, 10);
 // Let's create some variables we can use later. Since they will all equal nothing right now, we can say they are all equal to zero in one shot.
 let grab = 0;
 let startX = 0;
@@ -11,9 +11,9 @@ let startY = 0;
 let oldTop = 0;
 let oldLeft = 0;
 
-/* eslint-disable unicorn/prevent-abbreviations */
 // When you click, prevent the default behaviour for that event
-document.addEventListener(
+addEventListener(
+  document,
   'click',
   function (e) {
     e.preventDefault();
@@ -36,7 +36,9 @@ function pick(e) {
     grab = Date.now();
 
     // Add a 'data-drag' attribute to the picked element and assign the time they started grabbing it
-    e.target.dataset.drag = grab;
+    // e.target.dataset.drag = grab; // IE 11
+    // eslint-disable-next-line unicorn/prefer-dataset
+    e.target.setAttribute('data-drag', grab); // < IE 11
 
     // Add `position: relative;` to the picked element
     e.target.style.position = 'relative';
@@ -113,5 +115,3 @@ function out(e) {
   e.target.style.cursor = '';
   e.target.style.boxShadow = '';
 }
-
-/* eslint-enable unicorn/prevent-abbreviations */

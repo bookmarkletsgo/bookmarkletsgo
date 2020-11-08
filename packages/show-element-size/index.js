@@ -1,16 +1,22 @@
 import * as window from 'window';
+import * as p from '../../lib/polyfill/exports';
+p.apply(window, [p.Element.append]);
 import * as document from 'document';
+import { addEventListener } from '../../lib/common';
+import { removeEventListener } from '../../lib/property-names';
+import { createElement } from '../../lib/create-element';
+import { setAttribute } from '../../lib/set-attribute';
 
-const createElement = (tag) => document.createElement(tag);
-const showElementSize = window.showElementSize || {};
-// eslint-disable-next-line no-import-assign
-window.showElementSize = showElementSize;
+if (typeof window.pageXOffset === 'number') {
+  const showElementSize = window.showElementSize || {};
+  // eslint-disable-next-line no-import-assign
+  window.showElementSize = showElementSize;
 
-if (typeof showElementSize.isActive === 'undefined') {
-  showElementSize.isActive = false;
+  if (typeof showElementSize.isActive === 'undefined') {
+    showElementSize.isActive = false;
 
-  showElementSize.style = createElement('style');
-  showElementSize.style.innerHTML = `
+    showElementSize.style = createElement('style');
+    showElementSize.style.innerHTML = `
 			.bookmarkletsgo_show-element-size {
 				z-index: 1000000000;
 				position: absolute;
@@ -41,53 +47,69 @@ if (typeof showElementSize.isActive === 'undefined') {
 				outline: 0 !important;
 			}
 		`;
-  document.head.append(showElementSize.style);
+    document.head.append(showElementSize.style);
 
-  showElementSize.container = createElement('div');
-  showElementSize.container.classList.add('bookmarkletsgo_show-element-size');
-  document.body.append(showElementSize.container);
+    showElementSize.container = createElement('div');
+    setAttribute(
+      showElementSize.container,
+      'class',
+      'bookmarkletsgo_show-element-size'
+    );
+    document.body.append(showElementSize.container);
 
-  showElementSize.overlay = createElement('div');
-  showElementSize.overlay.classList.add(
-    'bookmarkletsgo_show-element-size__overlay'
-  );
-  showElementSize.container.append(showElementSize.overlay);
+    showElementSize.overlay = createElement('div');
+    setAttribute(
+      showElementSize.overlay,
+      'class',
+      'bookmarkletsgo_show-element-size__overlay'
+    );
+    showElementSize.container.append(showElementSize.overlay);
 
-  showElementSize.label = createElement('div');
-  showElementSize.label.classList.add(
-    'bookmarkletsgo_show-element-size__label'
-  );
-  showElementSize.container.append(showElementSize.label);
+    showElementSize.label = createElement('div');
+    setAttribute(
+      showElementSize.label,
+      'class',
+      'bookmarkletsgo_show-element-size__label'
+    );
+    showElementSize.container.append(showElementSize.label);
 
-  showElementSize.update = (event) => {
-    const rect = event.target.getBoundingClientRect();
+    showElementSize.update = (event) => {
+      const rect = event.target.getBoundingClientRect();
 
-    const overlayX = window.pageXOffset + rect.left;
-    const overlayY = window.pageYOffset + rect.top;
-    const overlayWidth = rect.width;
-    const overlayHeight = rect.height;
-    showElementSize.overlay.style.transform = `
+      const overlayX = window.pageXOffset + rect.left;
+      const overlayY = window.pageYOffset + rect.top;
+      const overlayWidth = rect.width;
+      const overlayHeight = rect.height;
+      showElementSize.overlay.style.transform = `
 				translate(${overlayX}px, ${overlayY}px)
 				scale(${overlayWidth}, ${overlayHeight})
 			`;
 
-    const labelX = window.pageXOffset + event.clientX + 8;
-    const labelY = window.pageYOffset + event.clientY + 16;
-    showElementSize.label.style.transform = `translate(${labelX}px, ${labelY}px)`;
+      const labelX = window.pageXOffset + event.clientX + 8;
+      const labelY = window.pageYOffset + event.clientY + 16;
+      showElementSize.label.style.transform = `translate(${labelX}px, ${labelY}px)`;
 
-    const elementWidth = Math.round(rect.width);
-    const elementHeight = Math.round(rect.height);
-    showElementSize.label.textContent = `${elementWidth} × ${elementHeight}`;
+      const elementWidth = Math.round(rect.width);
+      const elementHeight = Math.round(rect.height);
+      showElementSize.label.textContent = `${elementWidth} × ${elementHeight}`;
 
-    showElementSize.container.style.opacity = '1';
-  };
-}
+      showElementSize.container.style.opacity = '1';
+    };
+  }
 
-if (showElementSize.isActive) {
-  showElementSize.isActive = false;
-  document.removeEventListener('mousemove', showElementSize.update);
-  showElementSize.container.style.opacity = '0';
+  if (showElementSize.isActive) {
+    showElementSize.isActive = false;
+    showElementSize[removeEventListener]();
+    showElementSize.container.style.opacity = '0';
+  } else {
+    showElementSize.isActive = true;
+    showElementSize[removeEventListener] = addEventListener(
+      document,
+      'mousemove',
+      showElementSize.update
+    );
+  }
 } else {
-  showElementSize.isActive = true;
-  document.addEventListener('mousemove', showElementSize.update, false);
+  // IE 8
+  alert('Do not support this browser.');
 }

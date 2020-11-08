@@ -1,5 +1,9 @@
+import * as window from 'window';
+import * as p from '../../lib/polyfill/exports';
+p.apply(window, [p.Element.append]);
 import * as document from 'document';
-import { createElement } from '../../lib/common';
+import { setAttribute } from '../../lib/set-attribute';
+import { createElement } from '../../lib/create-element';
 
 let i;
 let link;
@@ -12,9 +16,12 @@ for (i = 0; (link = document.links[i]); ++i) {
   // x.appendChild(document.createTextNode(h));
   tooltip = createElement('span');
   tooltipInner = createElement('span');
-  tooltip.style = 'position:relative;';
-  tooltipInner.style =
-    'position:absolute;top:3px;left:3px;white-space: nowrap;padding:3px;background:#f5f5f5;opacity:60%;color:black !important;font-size:12px !important;';
+  setAttribute(tooltip, 'style', 'position:relative;');
+  setAttribute(
+    tooltipInner,
+    'style',
+    'position:absolute;top:3px;left:3px;white-space: nowrap;padding:3px;background:#f5f5f5;opacity:60%;color:black !important;font-size:12px !important;'
+  );
   tooltipInner.innerHTML = url;
   tooltip.append(tooltipInner);
   link.append(tooltip);
