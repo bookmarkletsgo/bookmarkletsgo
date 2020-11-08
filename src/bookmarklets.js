@@ -10,9 +10,7 @@ import { postMessage, addMessageHandler } from '../lib/message';
 import { getAttribute } from '../lib/get-attribute';
 
 const top = window.top;
-// [IE 8] In the top window, window.top === window => false, should use '=='.
-// eslint-disable-next-line eqeqeq
-const isIframe = window.top != window;
+const isIframe = window.top !== window;
 const opener = window.opener;
 
 const decode = decodeURIComponent;
