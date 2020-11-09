@@ -2,11 +2,19 @@ import * as window from 'window';
 import * as p from '../lib/polyfill/exports';
 p.apply(window, [p.String.includes]);
 import * as document from 'document';
-import { addEventListenerX, isIE, hasClass } from '../lib/common';
+import {
+  addEventListenerX,
+  isIE,
+  hasClass,
+  addClass,
+  removeClass
+} from '../lib/common';
 import { forEach } from '../lib/array-foreach';
+import { includes } from '../lib/array-includes';
 import copy from '../lib/copy-common';
 import executeScript from '../lib/execute-script';
 import { postMessage, addMessageHandler } from '../lib/message';
+import { getIds, add, remove } from '../lib/favorites';
 import { getAttribute } from '../lib/get-attribute';
 
 const top = window.top;
@@ -58,6 +66,7 @@ const setTitleAndUrl = (item) => {
   document.title = item.text || 'BookmarkletsGo';
 };
 
+const favoritesIds = getIds();
 forEach(document.querySelectorAll('a'), (item) => {
   if (hasClass(item, 'btn_copy')) {
     addEventListenerX(item, 'click', (event) => {
@@ -65,7 +74,32 @@ forEach(document.querySelectorAll('a'), (item) => {
       copy(getHref(bookmarklet));
 
       event.preventDefault();
-      return false;
+    });
+  } else if (hasClass(item, 'btn_add_fav')) {
+    if (includes(favoritesIds, item.parentNode.firstChild.id.slice(15))) {
+      addClass(item, 'on');
+      item.textContent = 'Remove from Favorites';
+    }
+
+    addEventListenerX(item, 'click', (event) => {
+      const target = event.target;
+      const bookmarklet = target.parentNode.firstChild;
+      const item = {
+        _id: bookmarklet.id.slice(15),
+        name: bookmarklet.name,
+        code: getHref(bookmarklet)
+      };
+      remove(item);
+      if (hasClass(target, 'on')) {
+        removeClass(target, 'on');
+        target.textContent = 'Add to Favorites';
+      } else {
+        add(item);
+        addClass(target, 'on');
+        target.textContent = 'Remove from Favorites';
+      }
+
+      event.preventDefault();
     });
   } else {
     addEventListenerX(item, 'click', (event) => {

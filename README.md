@@ -37,7 +37,7 @@ npm run build:prod
 
 ## TODO list
 
-- Save favorite bookmarklets
+- [x] Save favorite bookmarklets
 - Category of bookmarklets
 - Search bookmarklets
 - Update version of main bookmarklet

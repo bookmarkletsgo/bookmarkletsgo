@@ -60,11 +60,12 @@ if (globalVal[initialized]) {
         let document = null;
         try {
           document = iframe.contentDocument;
-        } catch(_){
+        } catch (_) {
           try {
             document = window.document;
-          } catch(_){}
+          } catch (_) {}
         }
+
         if (!window || !document) {
           return;
         }

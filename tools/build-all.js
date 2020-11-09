@@ -89,6 +89,7 @@ function buildHtml(bookmarklets) {
       if (a._id.startsWith('main') && !b._id.startsWith('main')) {
         return -1;
       }
+
       if (b._id.startsWith('main') && !a._id.startsWith('main')) {
         return 1;
       }
@@ -97,11 +98,13 @@ function buildHtml(bookmarklets) {
     })
     .map(
       (bookmarklet) =>
-        `<li><a id="bookmarkletsgo_${bookmarklet._id}" href="${
-          bookmarklet.bookmarkletSrc
-        }" data-href="${bookmarklet.bookmarkletSrc}">${
+        `<li><a id="bookmarkletsgo_${bookmarklet._id}" name="${
           bookmarklet.title || bookmarklet.name
-        }</a> (<a class="btn_copy" href="#">Copy</a>)</li>`
+        }" href="${bookmarklet.bookmarkletSrc}" data-href="${
+          bookmarklet.bookmarkletSrc
+        }">${
+          bookmarklet.title || bookmarklet.name
+        }</a> (<a class="btn_copy" href="#">Copy</a> <a class="btn_add_fav" href="#">Add to Favorites</a>)</li>`
     );
 
   return Promise.all([
