@@ -1,11 +1,27 @@
+sudo: false
 language: node_js
-
-node_js:
-  - "10"
-  - "12"
-  - "14"
+node_js: "12"
+before_cache:
+  - rm -rf node_modules/bookmarkleter
+branches:
+  only:
+    - master
 
 script:
-  - npm run lint
-  - npm run test
   - npm run build:prod
+
+deploy:
+  - provider: pages
+    project_name: bookmarkletsgo
+    skip_cleanup: true
+    local_dir: public
+    repo: bookmarkletsgo/bookmarkletsgo.github.io
+    target_branch: master
+    github_token: $GITHUB_TOKEN
+    keep_history: false
+    committer_from_gh: true
+    name: dailyrandomphoto
+    email: dailyrandomphoto@gmail.com
+    commit_message: "Site updated at `date +'%Y-%m-%d %T'`"
+    on:
+      branch: master

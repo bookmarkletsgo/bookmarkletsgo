@@ -44,7 +44,7 @@ npm run build:prod
 - Update version of saved bookmarklets
 - Contribution guideline
 - [x] Build bookmarklet tool
-- Github action for build bookmarklet
+- [x] Github action for build bookmarklet
 - Bookmarklet information
   - title, description, version
   - category, tags

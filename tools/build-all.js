@@ -171,11 +171,6 @@ try {
     );
   }
 
-  copySync(
-    resolve(WORKING_DIR, 'lib/polyfill'),
-    resolve(WORKING_DIR, 'public/lib/polyfill')
-  );
-
   loadPackages(resolve(WORKING_DIR, 'packages'))
     .then((bookmarklets) => {
       printInfo(bookmarklets);
