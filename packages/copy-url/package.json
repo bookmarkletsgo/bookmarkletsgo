@@ -1,5 +1,5 @@
 {
-  "name": "copy-title-url",
+  "name": "copy-url",
   "title": "Copy URL",
   "version": "1.0.0",
   "description": "Copy URL of current page to the clipboard.",

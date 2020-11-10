@@ -94,7 +94,7 @@ function buildHtml(bookmarklets) {
         return 1;
       }
 
-      return a.name.localeCompare(b.name);
+      return a.title.localeCompare(b.title);
     })
     .map(
       (bookmarklet) =>
