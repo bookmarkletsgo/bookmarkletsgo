@@ -1,7 +1,6 @@
 import * as window from 'window';
 import { isIE, getIEVersion, dummyParam } from '../../lib/common';
-import { APP_NAME, APP_GLOBAL_NAME } from '../../lib/constants';
-import { serverOrigin as iframeOrigin } from '../../lib/config';
+import { APP_NAME, APP_GLOBAL_NAME, APP_URL } from '../../lib/constants';
 import executeScript from '../../lib/execute-script';
 import { postMessage, addMessageHandler } from '../../lib/message';
 
@@ -36,7 +35,7 @@ if (isIE() && getIEVersion() < 10) {
     }
   });
 
-  const iframeUrl = iframeOrigin + '/bookmarklets.html' + dummyParam();
+  const iframeUrl = APP_URL + dummyParam();
   if (window.name === APP_NAME) window.name = null;
   const openedWindow = window.open(iframeUrl, APP_NAME);
   if (!openedWindow) {

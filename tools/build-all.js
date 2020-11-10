@@ -10,10 +10,10 @@ const {
   writeFile,
   ensureDirSync,
   copyFileSync,
-  copySync,
   removeSync
 } = require('fs-extra');
 const buildBookmarklet = require('./build-bookmarklet.js');
+const APP_NAME = 'bookmarkletsgo';
 const WORKING_DIR = process.cwd();
 const htmlTemplteFilepath = resolve(WORKING_DIR, 'src/bookmarklets.html');
 const jsFilepath = resolve(WORKING_DIR, 'src/bookmarklets.js');
@@ -98,7 +98,7 @@ function buildHtml(bookmarklets) {
     })
     .map(
       (bookmarklet) =>
-        `<li><a id="bookmarkletsgo_${bookmarklet._id}" name="${
+        `<li><a id="${APP_NAME}_${bookmarklet._id}" name="${
           bookmarklet.title || bookmarklet.name
         }" href="${bookmarklet.bookmarkletSrc}" data-href="${
           bookmarklet.bookmarkletSrc

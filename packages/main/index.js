@@ -1,7 +1,7 @@
 'use strict';
 import * as window from 'window';
 import * as p from '../../lib/polyfill/exports';
-p.apply(window, [p.String.includes, p.Element.remove, p.ObjectAssign]);
+p.apply(window, [p.String.startsWith, p.Element.remove, p.ObjectAssign]);
 import * as document from 'document';
 import * as setTimeout from 'setTimeout';
 import { addEventListener, hasClass, dummyParam } from '../../lib/common';
@@ -10,7 +10,6 @@ import { createElement } from '../../lib/create-element';
 import { querySelector } from '../../lib/query-selector';
 import { setAttribute } from '../../lib/set-attribute';
 import { append } from '../../lib/element-append';
-import { serverOrigin as iframeOrigin } from '../../lib/config';
 import executeScript from '../../lib/execute-script';
 import iframeSetHtml from '../../lib/iframe-set-html';
 import iframeOnload from '../../lib/iframe-onload';
@@ -19,7 +18,13 @@ import {
   removeEventListener,
   style
 } from '../../lib/property-names';
-import { APP_NAME, APP_SELECTOR, APP_GLOBAL_NAME } from '../../lib/constants';
+import {
+  APP_NAME,
+  APP_SELECTOR,
+  APP_GLOBAL_NAME,
+  APP_URL,
+  COMMAND_RUN_PREFIX
+} from '../../lib/constants';
 import copy from '../../lib/copy-common';
 const globalVal = window[APP_GLOBAL_NAME] || {};
 window[APP_GLOBAL_NAME] = globalVal;
@@ -46,7 +51,7 @@ if (globalVal[initialized]) {
     globalVal[removeEventListener] = null;
   }
 
-  const iframeUrl = iframeOrigin + '/bookmarklets.html' + dummyParam();
+  const iframeUrl = APP_URL + dummyParam();
   let iframeLoaded = false;
   let openedWindow = null;
 
@@ -90,11 +95,13 @@ if (globalVal[initialized]) {
                 const bookmarklet = target.parentNode.firstChild;
                 copy(bookmarklet.href);
               } else {
-                let url = target.href;
+                const url = target.href;
                 // eslint-disable-next-line no-script-url
-                if (url && url.indexOf('javascript:') === 0) {
-                  url = iframeOrigin + '/bookmarklets.html#run:' + url;
-                  url = window.open(url, '_blank');
+                if (url && url.startsWith('javascript:')) {
+                  window.open(
+                    APP_URL + COMMAND_RUN_PREFIX + target.id.slice(15),
+                    '_blank'
+                  );
                 }
               }
             },

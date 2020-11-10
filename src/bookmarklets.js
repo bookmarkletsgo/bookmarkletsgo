@@ -1,7 +1,8 @@
 import * as window from 'window';
 import * as p from '../lib/polyfill/exports';
-p.apply(window, [p.String.includes]);
+p.apply(window, [p.String.startsWith]);
 import * as document from 'document';
+import * as location from 'location';
 import {
   addEventListenerX,
   isIE,
@@ -15,7 +16,12 @@ import copy from '../lib/copy-common';
 import executeScript from '../lib/execute-script';
 import { postMessage, addMessageHandler } from '../lib/message';
 import { getIds, add, remove } from '../lib/favorites';
+import { querySelector } from '../lib/query-selector';
 import { getAttribute } from '../lib/get-attribute';
+import {
+  BOOKMARKLETS_SELECTOR_PREFIX,
+  COMMAND_RUN_PREFIX
+} from '../lib/constants';
 
 const top = window.top;
 const isIframe = window.top !== window;
@@ -26,7 +32,8 @@ const decode = decodeURIComponent;
 const getScript = (s) => decode(s.slice(s.indexOf('javascript:') + 11));
 
 // data-href for IE
-const getHref = (e) => getAttribute(e, 'data-href') || getAttribute(e, 'href');
+const getHref = (e) =>
+  e ? getAttribute(e, 'data-href') || getAttribute(e, 'href') : '';
 
 const postBookmarketMessage = (target, element) => {
   const href = getHref(element);
@@ -41,8 +48,6 @@ const postBookmarketMessage = (target, element) => {
     postMessage(target, { type: 'script', content: script });
   }
 };
-
-import { querySelector } from '../lib/property-names';
 
 // const specialCharactersPattern = new RegExp(
 //   ["'", '"', '<', '>', '#', '@', ' ', '\\&', '\\?'].join('|'),
@@ -144,21 +149,26 @@ addMessageHandler(window, (message) => {
   if (message.type === 'get_script') {
     const id = message.content;
     console.info('get: ' + id);
-    const item = document[querySelector]('#bookmarkletsgo_' + id);
+    const item = querySelector(BOOKMARKLETS_SELECTOR_PREFIX + id);
     if (item) {
       postBookmarketMessage(opener, item);
     }
   }
 });
 
-if (location.hash.includes('run:javascript:')) {
-  const script = getScript(location.hash);
-  executeScript(script, (error) => {
-    if (error) {
-      console.log(error);
-      alert('This site does not support the selected bookmarklet.');
-    }
-  });
+if (location.hash.startsWith(COMMAND_RUN_PREFIX)) {
+  const id = location.hash.slice(19);
+  console.info('run: ' + id);
+  const item = querySelector(BOOKMARKLETS_SELECTOR_PREFIX + id);
+  if (item) {
+    const script = getScript(getHref(item));
+    executeScript(script, (error) => {
+      if (error) {
+        console.log(error);
+        alert('This site does not support the selected bookmarklet.');
+      }
+    });
+  }
 } else {
   if (opener) {
     postMessage(opener, { type: 'message', content: 'opened_window_loaded' });
@@ -168,16 +178,16 @@ if (location.hash.includes('run:javascript:')) {
   }
 
   // initialize title and URL
-  setTitleAndUrl(document[querySelector]('#bookmarkletsgo_main'));
+  setTitleAndUrl(querySelector(BOOKMARKLETS_SELECTOR_PREFIX + 'main'));
 }
 
 if (isIframe) {
   postMessage(top, { type: 'message', content: 'iframe_loaded' });
 } else {
-  document[querySelector]('#tip_bookmark').style.display = '';
+  querySelector('#tip_bookmark').style.display = '';
 }
 
-const cspStyle = document[querySelector]('style');
+const cspStyle = querySelector('style');
 cspStyle.innerHTML = cspStyle.innerHTML.replace('.csp_off', '.csp_on');
 
 console.log('==============');
