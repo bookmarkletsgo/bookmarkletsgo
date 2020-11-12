@@ -19,6 +19,7 @@ import { getIds, add, remove } from '../lib/favorites';
 import { getById, addAll } from '../lib/bookmarklets';
 import { querySelector } from '../lib/query-selector';
 import { APP_GLOBAL_NAME, COMMAND_RUN_PREFIX } from '../lib/constants';
+import iframeSetHtml from '../lib/iframe-set-html';
 
 const globalVal = window[APP_GLOBAL_NAME] || {};
 window[APP_GLOBAL_NAME] = globalVal;
@@ -35,6 +36,8 @@ const decode = decodeURIComponent;
 const getScript = (s) => decode(s.slice(s.indexOf('javascript:') + 11));
 
 const getIdFromElement = (element) => element.id.slice(15);
+
+const getIdFromLocationHash = () => location.hash.slice(19);
 
 const runBookmarkletById = (id) => {
   const item = getById(id);
@@ -163,13 +166,47 @@ addMessageHandler(window, (message, event) => {
     const id = message.content;
     console.info('get: ' + id);
     postBookmarketMessageById(event.source, id);
+  } else if (message.type === 'context') {
+    if (location.hash.startsWith(COMMAND_RUN_PREFIX)) {
+      let html = message.content.innerHTML;
+      const location = message.content.location;
+      if (!html.includes('<base ')) {
+        html = html.replace(
+          /(<head[^>]*>)/,
+          '$1<base href="' + location.href + '">'
+        );
+      }
+
+      // display host html in the current page
+      iframeSetHtml(window, html, {
+        origin: location.origin
+      });
+
+      setTimeout(() => {
+        runBookmarkletById('main');
+
+        const id = getIdFromLocationHash();
+        if (!id.startsWith('main')) {
+          console.info('run: ' + id);
+          runBookmarkletById(id);
+        }
+      }, 10);
+    }
   }
 });
 
 if (location.hash.startsWith(COMMAND_RUN_PREFIX)) {
-  const id = location.hash.slice(19);
-  console.info('run: ' + id);
-  runBookmarkletById(id);
+  if (opener) {
+    // wait for the host send required data, then run the bookmarklet from the message handler
+    postMessage(opener.top, {
+      type: 'message',
+      content: 'opened_window_loaded'
+    });
+  } else {
+    const id = getIdFromLocationHash();
+    console.info('run: ' + id);
+    runBookmarkletById(id);
+  }
 } else {
   if (opener) {
     postMessage(opener, { type: 'message', content: 'opened_window_loaded' });

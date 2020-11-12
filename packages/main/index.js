@@ -5,7 +5,7 @@ p.apply(window, [p.String.startsWith, p.Element.remove, p.ObjectAssign]);
 import * as document from 'document';
 import * as setTimeout from 'setTimeout';
 import { addEventListener, hasClass, dummyParam } from '../../lib/common';
-import { addMessageHandler } from '../../lib/message';
+import { postMessage, addMessageHandler } from '../../lib/message';
 import { createElement } from '../../lib/create-element';
 import { querySelector } from '../../lib/query-selector';
 import { setAttribute } from '../../lib/set-attribute';
@@ -39,6 +39,29 @@ const toggleView = () => {
   }
 };
 
+// post message of information of host to bookmarklet runner
+const postContextMessage = (target) => {
+  if (target) {
+    postMessage(target, {
+      type: 'context',
+      content: {
+        location: {
+          hash: location.hash,
+          host: location.host,
+          hostname: location.hostname,
+          href: location.href,
+          origin: location.origin,
+          pathname: location.pathname,
+          port: location.port,
+          protocal: location.protocal
+        },
+        innerHTML: document.documentElement.innerHTML,
+        title: document.title
+      }
+    });
+  }
+};
+
 if (globalVal[initialized]) {
   toggleView();
 } else {
@@ -55,7 +78,7 @@ if (globalVal[initialized]) {
   let iframeLoaded = false;
   let openedWindow = null;
 
-  globalVal[removeEventListener] = addMessageHandler(window, (message) => {
+  globalVal[removeEventListener] = addMessageHandler(window, (message, evt) => {
     if (message.type === 'iframe_content') {
       const iframe = querySelector(APP_SELECTOR + ' > iframe');
       if (!iframe) return;
@@ -98,10 +121,12 @@ if (globalVal[initialized]) {
                 const url = target.href;
                 // eslint-disable-next-line no-script-url
                 if (url && url.startsWith('javascript:')) {
-                  window.open(
+                  const win = window.open(
                     APP_URL + COMMAND_RUN_PREFIX + target.id.slice(15),
-                    '_blank'
+                    APP_NAME + '_run'
                   );
+                  // post a message immediately if the window have been opened
+                  postContextMessage(win);
                 }
               }
             },
@@ -128,6 +153,8 @@ if (globalVal[initialized]) {
     } else if (message.content === 'iframe_loaded') {
       iframeLoaded = true;
       onInitialize();
+    } else if (message.content === 'opened_window_loaded') {
+      postContextMessage(evt.source);
     }
   });
 
