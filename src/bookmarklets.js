@@ -16,12 +16,15 @@ import copy from '../lib/copy-common';
 import executeScript from '../lib/execute-script';
 import { postMessage, addMessageHandler } from '../lib/message';
 import { getIds, add, remove } from '../lib/favorites';
+import { getById, addAll } from '../lib/bookmarklets';
 import { querySelector } from '../lib/query-selector';
-import { getAttribute } from '../lib/get-attribute';
-import {
-  BOOKMARKLETS_SELECTOR_PREFIX,
-  COMMAND_RUN_PREFIX
-} from '../lib/constants';
+import { APP_GLOBAL_NAME, COMMAND_RUN_PREFIX } from '../lib/constants';
+
+const globalVal = window[APP_GLOBAL_NAME] || {};
+window[APP_GLOBAL_NAME] = globalVal;
+globalVal.callback = (data) => {
+  addAll(data);
+};
 
 const top = window.top;
 const isIframe = window.top !== window;
@@ -31,22 +34,35 @@ const decode = decodeURIComponent;
 // eslint-disable-next-line no-script-url
 const getScript = (s) => decode(s.slice(s.indexOf('javascript:') + 11));
 
-// data-href for IE
-const getHref = (e) =>
-  e ? getAttribute(e, 'data-href') || getAttribute(e, 'href') : '';
+const getIdFromElement = (element) => element.id.slice(15);
 
-const postBookmarketMessage = (target, element) => {
-  const href = getHref(element);
-  const script = getScript(href);
-  // console.log(script);
-  if (
-    script.indexOf('void') === 0 ||
-    script.indexOf("'use strict';void") === 0 ||
-    script.indexOf("'use strict';var _typeof") === 0 ||
-    script.indexOf('(function') === 0
-  ) {
-    postMessage(target, { type: 'script', content: script });
+const runBookmarkletById = (id) => {
+  const item = getById(id);
+  if (item) {
+    const script = getScript(item.bookmarkletSrc);
+    executeScript(script, (error) => {
+      if (error) {
+        console.log(error);
+        alert('This site does not support the selected bookmarklet.');
+      }
+    });
+    return true;
   }
+
+  alert('Can not find this bookmarklet.');
+  return false;
+};
+
+const postBookmarketMessageById = (target, id) => {
+  const item = getById(id);
+  if (item) {
+    const script = getScript(item.bookmarkletSrc);
+    postMessage(target, { type: 'script', content: script });
+    return true;
+  }
+
+  alert('Can not find this bookmarklet.');
+  return false;
 };
 
 // const specialCharactersPattern = new RegExp(
@@ -56,44 +72,53 @@ const postBookmarketMessage = (target, element) => {
 // const urlencode = (code) =>
 //   code.replace(specialCharactersPattern, encodeURIComponent);
 
-const setTitleAndUrl = (item) => {
+const setTitleAndUrlById = (id) => {
   if (isIframe) return;
-  try {
-    // https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
-    if (!isIE() || item.href.length < 2000) {
-      location.hash = '#' + item.href;
-    } else {
-      location.hash = '#none';
-    }
-  } catch (_) {}
+  const item = getById(id);
+  if (item) {
+    try {
+      // https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
+      if (!isIE() || item.bookmarkletSrc.length < 2000) {
+        location.hash = '#' + item.bookmarkletSrc;
+      } else {
+        location.hash = '#none';
+      }
+    } catch (_) {}
 
-  // eslint-disable-next-line no-import-assign
-  document.title = item.text || 'BookmarkletsGo';
+    // eslint-disable-next-line no-import-assign
+    document.title = item.title;
+  }
 };
 
 const favoritesIds = getIds();
+
 forEach(document.querySelectorAll('a'), (item) => {
   if (hasClass(item, 'btn_copy')) {
     addEventListenerX(item, 'click', (event) => {
-      const bookmarklet = event.target.parentNode.firstChild;
-      copy(getHref(bookmarklet));
-
       event.preventDefault();
+      const bookmarklet = event.target.parentNode.firstChild;
+      const item = getById(getIdFromElement(bookmarklet));
+      if (item) {
+        copy(item.bookmarkletSrc);
+      } else {
+        alert('Can not find this bookmarklet.');
+      }
     });
   } else if (hasClass(item, 'btn_add_fav')) {
-    if (includes(favoritesIds, item.parentNode.firstChild.id.slice(15))) {
+    if (includes(favoritesIds, getIdFromElement(item.parentNode.firstChild))) {
       addClass(item, 'on');
       item.textContent = 'Remove from Favorites';
     }
 
     addEventListenerX(item, 'click', (event) => {
+      event.preventDefault();
       const target = event.target;
       const bookmarklet = target.parentNode.firstChild;
-      const item = {
-        _id: bookmarklet.id.slice(15),
-        name: bookmarklet.name,
-        code: getHref(bookmarklet)
-      };
+      const item = getById(getIdFromElement(bookmarklet));
+      if (!item) {
+        return alert('Can not find this bookmarklet.');
+      }
+
       remove(item);
       if (hasClass(target, 'on')) {
         removeClass(target, 'on');
@@ -103,16 +128,15 @@ forEach(document.querySelectorAll('a'), (item) => {
         addClass(target, 'on');
         target.textContent = 'Remove from Favorites';
       }
-
-      event.preventDefault();
     });
   } else {
     addEventListenerX(item, 'click', (event) => {
+      const id = getIdFromElement(event.target);
       // setting title and url after copy-title-url bookmarklets have executed
-      setTimeout(() => setTitleAndUrl(event.target), 100);
+      setTimeout(() => setTitleAndUrlById(id), 100);
 
       if (isIframe) {
-        postBookmarketMessage(top, event.target);
+        postBookmarketMessageById(top, id);
         event.preventDefault();
       } else if (opener) {
         if (
@@ -125,50 +149,27 @@ forEach(document.querySelectorAll('a'), (item) => {
           return false;
         }
 
-        postBookmarketMessage(opener, event.target);
+        postBookmarketMessageById(opener, id);
         event.preventDefault();
-      } else if (isIE()) {
-        const href = getHref(event.target);
-        // https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
-        if (href.length >= 5200) {
-          const script = getScript(href);
-          executeScript(script, (error) => {
-            if (error) {
-              console.log(error);
-              alert('This site does not support the selected bookmarklet.');
-            }
-          });
-          event.preventDefault();
-        }
+      } else if (runBookmarkletById(id)) {
+        event.preventDefault();
       }
     });
   }
 });
 
-addMessageHandler(window, (message) => {
+addMessageHandler(window, (message, event) => {
   if (message.type === 'get_script') {
     const id = message.content;
     console.info('get: ' + id);
-    const item = querySelector(BOOKMARKLETS_SELECTOR_PREFIX + id);
-    if (item) {
-      postBookmarketMessage(opener, item);
-    }
+    postBookmarketMessageById(event.source, id);
   }
 });
 
 if (location.hash.startsWith(COMMAND_RUN_PREFIX)) {
   const id = location.hash.slice(19);
   console.info('run: ' + id);
-  const item = querySelector(BOOKMARKLETS_SELECTOR_PREFIX + id);
-  if (item) {
-    const script = getScript(getHref(item));
-    executeScript(script, (error) => {
-      if (error) {
-        console.log(error);
-        alert('This site does not support the selected bookmarklet.');
-      }
-    });
-  }
+  runBookmarkletById(id);
 } else {
   if (opener) {
     postMessage(opener, { type: 'message', content: 'opened_window_loaded' });
@@ -178,7 +179,7 @@ if (location.hash.startsWith(COMMAND_RUN_PREFIX)) {
   }
 
   // initialize title and URL
-  setTitleAndUrl(querySelector(BOOKMARKLETS_SELECTOR_PREFIX + 'main'));
+  setTitleAndUrlById('main');
 }
 
 if (isIframe) {
@@ -199,3 +200,10 @@ console.log('top === window', top === window);
 // eslint-disable-next-line no-eq-null,eqeqeq
 console.log('opener == null', opener == null);
 console.log('window.name', window.name);
+
+// rewrite localStorage, prevent access from any where
+Object.defineProperty(window, 'localStorage', {
+  get: () => window.sessionStorage,
+  configurable: false,
+  enumerable: true
+});

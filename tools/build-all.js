@@ -98,14 +98,24 @@ function buildHtml(bookmarklets) {
     })
     .map(
       (bookmarklet) =>
-        `<li><a id="${APP_NAME}_${bookmarklet._id}" name="${
-          bookmarklet.title || bookmarklet.name
-        }" href="${bookmarklet.bookmarkletSrc}" data-href="${
+        `<li><a id="${APP_NAME}_${bookmarklet._id}" href="${
           bookmarklet.bookmarkletSrc
         }">${
           bookmarklet.title || bookmarklet.name
         }</a> (<a class="btn_copy" href="#">Copy</a> <a class="btn_add_fav" href="#">Add to Favorites</a>)</li>`
     );
+
+  const newBookmarklets = bookmarklets.map(
+    ({ _id, name, title, version, description, keywords, bookmarkletSrc }) => ({
+      _id,
+      name,
+      title,
+      version,
+      description,
+      keywords,
+      bookmarkletSrc
+    })
+  );
 
   return Promise.all([
     readFile(htmlTemplteFilepath, 'utf-8'),
@@ -120,6 +130,7 @@ function buildHtml(bookmarklets) {
     .then(([htmlTemplate, script]) =>
       htmlTemplate
         .replace('{bookmarklets}', list.join(''))
+        .replace('{bookmarkletsData}', JSON.stringify(newBookmarklets))
         .replace('{bookmarkletsScript}', script)
     )
     .then((content) => writeFile(distFilepath, content));
