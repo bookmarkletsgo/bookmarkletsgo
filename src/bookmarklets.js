@@ -26,6 +26,7 @@ const globalVal = window[APP_GLOBAL_NAME] || {};
 window[APP_GLOBAL_NAME] = globalVal;
 globalVal.callback = (data) => {
   addAll(data);
+  delete globalVal.callback;
 };
 
 const top = window.top;
@@ -184,6 +185,7 @@ addMessageHandler(window, (message, event) => {
       });
 
       setTimeout(() => {
+        globalVal.initialized = false;
         runBookmarkletById('main');
 
         const id = getIdFromLocationHash();

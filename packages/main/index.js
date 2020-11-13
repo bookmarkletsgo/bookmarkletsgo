@@ -62,7 +62,7 @@ const postContextMessage = (target) => {
   }
 };
 
-if (globalVal[initialized]) {
+if (globalVal[initialized] && globalVal[removeEventListener]) {
   toggleView();
 } else {
   if (querySelector(APP_SELECTOR)) {
