@@ -5,6 +5,7 @@ import * as document from 'document';
 import * as location from 'location';
 import {
   addEventListenerX,
+  onDOMContentLoaded,
   isIE,
   hasClass,
   addClass,
@@ -195,29 +196,34 @@ addMessageHandler(window, (message, event) => {
   }
 });
 
-if (location.hash.startsWith(COMMAND_RUN_PREFIX)) {
-  if (opener) {
-    // wait for the host send required data, then run the bookmarklet from the message handler
-    postMessage(opener.top, {
-      type: 'message',
-      content: 'opened_window_loaded'
-    });
+onDOMContentLoaded(() => {
+  if (location.hash.startsWith(COMMAND_RUN_PREFIX)) {
+    if (opener) {
+      // wait for the host send required data, then run the bookmarklet from the message handler
+      postMessage(opener.top, {
+        type: 'message',
+        content: 'opened_window_loaded'
+      });
+    } else {
+      const id = getIdFromLocationHash();
+      console.info('run: ' + id);
+      runBookmarkletById(id);
+    }
   } else {
-    const id = getIdFromLocationHash();
-    console.info('run: ' + id);
-    runBookmarkletById(id);
-  }
-} else {
-  if (opener) {
-    postMessage(opener, { type: 'message', content: 'opened_window_loaded' });
-    let html = document.documentElement.innerHTML;
-    html = html.replace('.csp_on {display: none}', '.csp_off {display: none}');
-    postMessage(opener, { type: 'iframe_content', content: html });
-  }
+    if (opener) {
+      postMessage(opener, { type: 'message', content: 'opened_window_loaded' });
+      let html = document.documentElement.innerHTML;
+      html = html.replace(
+        '.csp_on {display: none}',
+        '.csp_off {display: none}'
+      );
+      postMessage(opener, { type: 'iframe_content', content: html });
+    }
 
-  // initialize title and URL
-  setTitleAndUrlById('main');
-}
+    // initialize title and URL
+    setTitleAndUrlById('main');
+  }
+});
 
 if (isIframe) {
   postMessage(top, { type: 'message', content: 'iframe_loaded' });
