@@ -243,10 +243,3 @@ console.log('top === window', top === window);
 // eslint-disable-next-line no-eq-null,eqeqeq
 console.log('opener == null', opener == null);
 console.log('window.name', window.name);
-
-// rewrite localStorage, prevent access from any where
-Object.defineProperty(window, 'localStorage', {
-  get: () => window.sessionStorage,
-  configurable: false,
-  enumerable: true
-});
