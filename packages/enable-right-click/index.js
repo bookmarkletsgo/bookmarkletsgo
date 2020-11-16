@@ -1,17 +1,24 @@
+import { forEach } from '../../lib/array-foreach';
+
 function applyTo(window) {
   try {
-    console.log(window.location.href);
     // eslint-disable-next-line unicorn/prefer-add-event-listener
     window.document.oncontextmenu = null;
-  } catch (error) {
-    console.log(error);
-  }
+    window.document.addEventListener(
+      'contextmenu',
+      function (event) {
+        event.cancelBubble = true;
+        event.stopPropagation();
+      },
+      true
+    );
+  } catch (_) {}
 }
 
 function recursion(window) {
   applyTo(window);
   if (window.frames.length > 0) {
-    Array.from(window.frames).forEach((w) => recursion(w));
+    forEach(window.frames, (w) => recursion(w));
   }
 }
 

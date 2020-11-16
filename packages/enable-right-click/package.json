@@ -2,7 +2,7 @@
   "name": "enable-right-click",
   "title": "Enable Right-Click",
   "version": "1.0.0",
-  "description": "Enable right-clicking.",
+  "description": "Enable right-clicking to show the context menu.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
