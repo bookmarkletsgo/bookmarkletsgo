@@ -53,10 +53,15 @@ const postContextMessage = (target) => {
           origin: location.origin,
           pathname: location.pathname,
           port: location.port,
-          protocal: location.protocal
+          protocal: location.protocal,
+          search: location.search
         },
-        innerHTML: document.documentElement.innerHTML,
-        title: document.title
+        document: {
+          title: document.title,
+          documentElement: {
+            innerHTML: document.documentElement.innerHTML
+          }
+        }
       }
     });
   }

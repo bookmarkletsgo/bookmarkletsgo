@@ -21,6 +21,7 @@ import { getById, addAll } from '../lib/bookmarklets';
 import { querySelector } from '../lib/query-selector';
 import { APP_GLOBAL_NAME, COMMAND_RUN_PREFIX } from '../lib/constants';
 import iframeSetHtml from '../lib/iframe-set-html';
+import { build } from '../lib/build-custom-context-script';
 
 const globalVal = window[APP_GLOBAL_NAME] || {};
 window[APP_GLOBAL_NAME] = globalVal;
@@ -41,10 +42,20 @@ const getIdFromElement = (element) => element.id.slice(15);
 
 const getIdFromLocationHash = () => location.hash.slice(19);
 
+const buildContextifiedScript = (script) => {
+  const context = window.context;
+  if (window.Proxy && context && (context.location || context.document)) {
+    return build(script, context.location, context.document);
+  }
+
+  return script;
+};
+
 const runBookmarkletById = (id) => {
   const item = getById(id);
   if (item) {
-    const script = getScript(item.bookmarkletSrc);
+    const script = buildContextifiedScript(getScript(item.bookmarkletSrc));
+
     executeScript(script, (error) => {
       if (error) {
         console.log(error);
@@ -61,7 +72,7 @@ const runBookmarkletById = (id) => {
 const postBookmarketMessageById = (target, id) => {
   const item = getById(id);
   if (item) {
-    const script = getScript(item.bookmarkletSrc);
+    const script = buildContextifiedScript(getScript(item.bookmarkletSrc));
     postMessage(target, { type: 'script', content: script });
     return true;
   }
@@ -169,8 +180,9 @@ addMessageHandler(window, (message, event) => {
     console.info('get: ' + id);
     postBookmarketMessageById(event.source, id);
   } else if (message.type === 'context') {
+    window.context = Object.assign({}, message.content);
     if (location.hash.startsWith(COMMAND_RUN_PREFIX)) {
-      let html = message.content.innerHTML;
+      let html = message.content.document.documentElement.innerHTML;
       const location = message.content.location;
       if (!html.includes('<base ')) {
         html = html.replace(
@@ -178,6 +190,8 @@ addMessageHandler(window, (message, event) => {
           '$1<base href="' + location.href + '">'
         );
       }
+
+      window.origin = location.origin;
 
       // display host html in the current page
       iframeSetHtml(window, html, {
@@ -194,6 +208,16 @@ addMessageHandler(window, (message, event) => {
           runBookmarkletById(id);
         }
       }, 10);
+    }
+  } else if (
+    message.type === 'message' &&
+    message.content === 'iframe_loaded'
+  ) {
+    if (window.context) {
+      postMessage(event.source, {
+        type: 'context',
+        content: Object.assign({}, window.context)
+      });
     }
   }
 });
