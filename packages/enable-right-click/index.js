@@ -1,18 +1,8 @@
 import { forEach } from '../../lib/array-foreach';
+import { blockEventListeners } from '../../lib/block-event-listeners';
 
 function applyTo(window) {
-  try {
-    // eslint-disable-next-line unicorn/prefer-add-event-listener
-    window.document.oncontextmenu = null;
-    window.document.addEventListener(
-      'contextmenu',
-      function (event) {
-        event.cancelBubble = true;
-        event.stopPropagation();
-      },
-      true
-    );
-  } catch (_) {}
+  blockEventListeners(window, 'contextmenu');
 }
 
 function recursion(window) {

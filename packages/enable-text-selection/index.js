@@ -1,29 +1,19 @@
 import { forEach } from '../../lib/array-foreach';
+import { blockEventListeners } from '../../lib/block-event-listeners';
 
 function applyTo(window) {
-  try {
-    const unbind = function (a) {
-      const ona = 'on' + a;
-      if (window.addEventListener)
-        window.addEventListener(
-          a,
-          function (event) {
-            event.cancelBubble = true;
-            event.stopPropagation();
-            for (let n = event.originalTarget; n; n = n.parentNode)
-              n[ona] = null;
-          },
-          true
-        );
-      window[ona] = null;
-      window.document[ona] = null;
-      if (window.document.body) window.document.body[ona] = null;
-    };
+  blockEventListeners(window, [
+    'mousedown',
+    'mouseup',
+    'selectstart',
+    'dragstart'
+  ]);
 
-    // unbind('click');
-    unbind('mousedown');
-    unbind('mouseup');
-    unbind('selectstart');
+  try {
+    const body = window.document.body;
+    if (body && body.style.MozUserSelect !== undefined) {
+      body.style.MozUserSelect = 'auto';
+    }
   } catch (_) {}
 }
 
